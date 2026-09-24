@@ -464,7 +464,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 14px;
       margin-top: 28px;
     }
@@ -475,7 +475,7 @@
       padding: 22px 16px;
       box-shadow: 0 10px 24px rgba(59,36,22,0.06);
     }
-    .card h3 {
+    .card h3, .schedule h3 {
       font-family: "Inter", sans-serif;
       font-size: 0.65rem;
       letter-spacing: 0.22em;
@@ -484,6 +484,38 @@
       margin-bottom: 8px;
     }
     .card p { font-size: 1.2rem; }
+    .schedule {
+      width: 100%;
+      margin: 18px 0 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(239,227,208,0.88));
+      border: 1px solid rgba(216, 195, 165, 0.6);
+      border-radius: 18px;
+      padding: 22px 24px 16px;
+      box-shadow: 0 10px 24px rgba(59,36,22,0.06);
+      text-align: center;
+    }
+    .sched-row {
+      display: grid;
+      grid-template-columns: 5.6rem 1fr;
+      gap: 14px;
+      align-items: baseline;
+      padding: 13px 8px;
+      border-bottom: 1px solid rgba(166, 124, 82, 0.28);
+      text-align: left;
+    }
+    .sched-row:last-child { border-bottom: 0; }
+    .sched-time {
+      font-family: "Inter", sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .sched-name {
+      font-size: 1.15rem;
+      color: var(--primary);
+    }
 
     .calendar {
       max-width: 420px;
@@ -726,7 +758,11 @@
           <div class="cards">
             <div class="card"><h3>When</h3><p data-field="dateLabelEn">Date to be announced</p></div>
             <div class="card"><h3>Where</h3><p data-field="venueName">Venue to be announced</p></div>
-            <div class="card"><h3>Time</h3><p data-field="timeLabel">5:00pm</p></div>
+          </div>
+          <div class="schedule">
+            <h3>Event schedule</h3>
+            <div class="sched-row"><span class="sched-time">5:00pm</span><span class="sched-name">Guest arrival</span></div>
+            <div class="sched-row"><span class="sched-time">5:30pm</span><span class="sched-name">Dinner</span></div>
           </div>
         </section>
 
@@ -799,6 +835,7 @@
           <option>4 guests</option>
           <option>5 guests</option>
           <option>6 guests</option>
+          <option>Unable to attend</option>
         </select>
         <label for="note">A note (optional)</label>
         <textarea id="note" name="note" placeholder="A song, a wish, or anything we should know"></textarea>
@@ -820,7 +857,6 @@
       venueName: "Akbar Restaurant",
       venueAddress: "21 Cortlandt Street",
       venueCity: "Edison, New Jersey",
-      timeLabel: "5:00pm",
     };
 
     document.title = `${WEDDING.partnerOne} & ${WEDDING.partnerTwo} — Walima`;
@@ -877,7 +913,11 @@
         });
         if (!res.ok) throw new Error("send failed");
         form.style.display = "none";
-        document.getElementById("rsvp-thanks").style.display = "block";
+        const thanks = document.getElementById("rsvp-thanks");
+        thanks.textContent = data.guests === "Unable to attend"
+          ? "Thank you for letting us know."
+          : "Thank you — we cannot wait to celebrate with you.";
+        thanks.style.display = "block";
       } catch (err) {
         btn.disabled = false;
         btn.textContent = "Send reply";
