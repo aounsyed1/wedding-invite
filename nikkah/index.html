@@ -851,6 +851,7 @@
           <option>4 guests</option>
           <option>5 guests</option>
           <option>6 guests</option>
+          <option>Unable to attend</option>
         </select>
         <label for="note">A note (optional)</label>
         <textarea id="note" name="note" placeholder="A song, a wish, or anything we should know"></textarea>
@@ -914,7 +915,7 @@
       btn.disabled = true;
       btn.textContent = "Sending…";
       try {
-        const res = await fetch("https://formsubmit.co/ajax/aoungalaxy@gmail.com", {
+        const res = await fetch("https://formsubmit.co/ajax/saanaqvi70@hotmail.com", {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
@@ -928,11 +929,15 @@
         });
         if (!res.ok) throw new Error("send failed");
         form.style.display = "none";
-        document.getElementById("rsvp-thanks").style.display = "block";
+        const thanks = document.getElementById("rsvp-thanks");
+        thanks.textContent = data.guests === "Unable to attend"
+          ? "Thank you for letting us know."
+          : "Thank you — we cannot wait to celebrate with you.";
+        thanks.style.display = "block";
       } catch (err) {
         btn.disabled = false;
         btn.textContent = "Send reply";
-        alert("Could not send your RSVP. Please try again, or email aoungalaxy@gmail.com.");
+        alert("Could not send your RSVP. Please try again, or email saanaqvi70@hotmail.com.");
       }
     });
 
