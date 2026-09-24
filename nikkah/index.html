@@ -56,14 +56,6 @@
       background-size: 28px 28px;
       z-index: 1;
     }
-    .floral {
-      position: absolute;
-      width: min(48vw, 340px);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .floral-tr { top: -8px; right: -8px; }
-    .floral-bl { bottom: -8px; left: -8px; }
     .corner {
       position: absolute;
       width: min(22vw, 220px);
@@ -662,7 +654,6 @@
       .cards { grid-template-columns: 1fr; }
       .corner { width: 64px; height: 64px; top: 12px; }
       .corner-bl { top: auto; bottom: 12px; }
-      .floral { width: min(58vw, 220px); }
     }
   </style>
 </head>
@@ -702,8 +693,6 @@
     <div class="corner corner-bl"></div>
     <main id="invite">
       <header class="hero">
-        <img class="floral floral-tr" src="../assets/nikkah-tulips-tr.png" alt="" />
-        <img class="floral floral-bl" src="../assets/nikkah-tulips-bl.png" alt="" />
         <div class="hero-inner">
           <span class="watermark">NIKKAH</span>
           <p class="kicker-en">We Would Like to Cordially Invite You to</p>
@@ -840,8 +829,8 @@
       partnerTwo: "Syeda Zoha Batool Naqvi",
       occasionEn: "The Nikkah Ceremony of",
       inviteLineEn: "request the pleasure of your company",
-      dateISO: "2027-01-10T17:00:00", // 5:00pm local
-      dateLabelEn: "January 10, 2027",
+      dateISO: "2027-01-09T17:00:00", // 5:00pm local
+      dateLabelEn: "January 9, 2027",
       venueName: "Akbar Restaurant",
       venueAddress: "21 Cortlandt Street",
       venueCity: "Edison, New Jersey",
