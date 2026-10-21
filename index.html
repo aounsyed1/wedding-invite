@@ -826,11 +826,8 @@
       <button class="close" id="rsvp-close" type="button" aria-label="Close">×</button>
       <p class="label" style="text-align: center;">RSVP</p>
       <p class="ar-title" style="text-align: center;">Confirm attendance</p>
-      <form id="rsvp-form" action="https://formsubmit.co/aoungalaxy@gmail.com" method="POST">
-        <input type="hidden" name="_subject" id="rsvp-subject" value="Walima RSVP" />
-        <input type="hidden" name="_template" value="table" />
-        <input type="hidden" name="_captcha" value="false" />
-        <input type="hidden" name="_next" id="rsvp-next" value="" />
+      <form id="rsvp-form">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off" />
         <label for="guest-name">Your name</label>
         <input id="guest-name" name="name" required placeholder="Your name" />
         <label for="guests">Guests</label>
@@ -858,6 +855,7 @@
       venueName: "Akbar Restaurant",
       venueAddress: "21 Cortlandt Street",
       venueCity: "Edison, New Jersey",
+      rsvpKey: "63b832a7-5ca5-452f-8e4f-f62c6607e541",
     };
 
     document.title = `${WEDDING.partnerOne} & ${WEDDING.partnerTwo} — Walima`;
@@ -907,15 +905,40 @@
       showRsvpThanks(rsvpParams.get("attend") === "no");
     }
 
-    rsvpForm.addEventListener("submit", () => {
+    rsvpForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
       const name = document.getElementById("guest-name").value.trim();
       const guests = document.getElementById("guests").value;
-      document.getElementById("rsvp-subject").value = "Walima RSVP — " + name;
-      const next = new URL(location.href);
-      next.searchParams.set("rsvp", "1");
-      next.searchParams.set("attend", guests === "Unable to attend" ? "no" : "yes");
-      document.getElementById("rsvp-next").value = next.toString();
-      rsvpForm.querySelector('button[type="submit"]').textContent = "Sending…";
+      const note = document.getElementById("note").value.trim();
+      const btn = rsvpForm.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = "Sending…";
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          signal: controller.signal,
+          body: JSON.stringify({
+            access_key: WEDDING.rsvpKey,
+            subject: "Walima RSVP — " + name,
+            from_name: "Walima Invitation",
+            name,
+            guests,
+            note: note || "(none)",
+          }),
+        });
+        clearTimeout(timer);
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || "send failed");
+        showRsvpThanks(guests === "Unable to attend");
+      } catch (err) {
+        clearTimeout(timer);
+        btn.disabled = false;
+        btn.textContent = "Send reply";
+        alert("Could not send your RSVP. Please try again.");
+      }
     });
 
     const parseLocalDateTime = (iso) => {
