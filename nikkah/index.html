@@ -843,12 +843,7 @@
         <input id="guest-name" name="name" required placeholder="Your name" />
         <label for="guests">Guests</label>
         <select id="guests" name="guests">
-          <option>1 guest</option>
-          <option>2 guests</option>
-          <option>3 guests</option>
-          <option>4 guests</option>
-          <option>5 guests</option>
-          <option>6 guests</option>
+          <option>Mr. and Mrs.</option>
           <option>Unable to attend</option>
         </select>
         <label for="note">A note (optional)</label>
@@ -913,7 +908,7 @@
       btn.disabled = true;
       btn.textContent = "Sending…";
       try {
-        const res = await fetch("https://formsubmit.co/ajax/saanaqvi70@hotmail.com", {
+        const res = await fetch("https://formsubmit.co/ajax/zohanaqvi8274@gmail.com", {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
@@ -935,7 +930,7 @@
       } catch (err) {
         btn.disabled = false;
         btn.textContent = "Send reply";
-        alert("Could not send your RSVP. Please try again, or email saanaqvi70@hotmail.com.");
+        alert("Could not send your RSVP. Please try again, or email zohanaqvi8274@gmail.com.");
       }
     });
 
