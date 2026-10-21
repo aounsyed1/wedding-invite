@@ -649,6 +649,8 @@
     }
     textarea { min-height: 90px; resize: vertical; }
     .thanks { display: none; font-style: italic; color: var(--accent); margin-top: 12px; }
+    .modal.is-sent form { display: none; }
+    .modal.is-sent .thanks { display: block; }
 
     .modal {
       position: fixed; inset: 0; z-index: 80;
@@ -838,7 +840,11 @@
       <button class="close" id="rsvp-close" type="button" aria-label="Close">×</button>
       <p class="label" style="text-align: center;">RSVP</p>
       <p class="ar-title" style="text-align: center;">Confirm attendance</p>
-      <form id="rsvp-form">
+      <form id="rsvp-form" action="https://formsubmit.co/zohanaqvi27@outlook.com" method="POST">
+        <input type="hidden" name="_subject" id="rsvp-subject" value="Nikkah RSVP" />
+        <input type="hidden" name="_template" value="table" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" id="rsvp-next" value="" />
         <label for="guest-name">Your name</label>
         <input id="guest-name" name="name" required placeholder="Your name" />
         <label for="guests">Guests</label>
@@ -896,42 +902,34 @@
     });
 
     const modal = document.getElementById("rsvp-modal");
+    const rsvpForm = document.getElementById("rsvp-form");
+    const rsvpThanks = document.getElementById("rsvp-thanks");
+    const showRsvpThanks = (declined) => {
+      rsvpThanks.textContent = declined
+        ? "Thank you for letting us know."
+        : "Thank you — we cannot wait to celebrate with you.";
+      modal.classList.add("is-open", "is-sent");
+    };
     document.getElementById("rsvp-open").addEventListener("click", () => modal.classList.add("is-open"));
     document.getElementById("rsvp-close").addEventListener("click", () => modal.classList.remove("is-open"));
     modal.addEventListener("click", (e) => { if (e.target === modal) modal.classList.remove("is-open"); });
 
-    document.getElementById("rsvp-form").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const btn = form.querySelector('button[type="submit"]');
-      const data = Object.fromEntries(new FormData(form));
-      btn.disabled = true;
-      btn.textContent = "Sending…";
-      try {
-        const res = await fetch("https://formsubmit.co/ajax/zohanaqvi27@outlook.com", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            _subject: "Nikkah RSVP — " + data.name,
-            _template: "table",
-            _captcha: "false",
-            Name: data.name,
-            Guests: data.guests,
-            Note: data.note || "(none)",
-          }),
-        });
-        if (!res.ok) throw new Error("send failed");
-        form.style.display = "none";
-        const thanks = document.getElementById("rsvp-thanks");
-        thanks.textContent = data.guests === "Unable to attend"
-          ? "Thank you for letting us know."
-          : "Thank you — we cannot wait to celebrate with you.";
-        thanks.style.display = "block";
-      } catch (err) {
-        btn.disabled = false;
-        btn.textContent = "Send reply";
-        alert("Could not send your RSVP. Please try again, or email zohanaqvi27@outlook.com.");
-      }
+    const rsvpParams = new URLSearchParams(location.search);
+    if (rsvpParams.get("rsvp") === "1") {
+      document.documentElement.classList.remove("is-sealed");
+      cover.classList.add("is-gone");
+      showRsvpThanks(rsvpParams.get("attend") === "no");
+    }
+
+    rsvpForm.addEventListener("submit", () => {
+      const name = document.getElementById("guest-name").value.trim();
+      const guests = document.getElementById("guests").value;
+      document.getElementById("rsvp-subject").value = "Nikkah RSVP — " + name;
+      const next = new URL(location.href);
+      next.searchParams.set("rsvp", "1");
+      next.searchParams.set("attend", guests === "Unable to attend" ? "no" : "yes");
+      document.getElementById("rsvp-next").value = next.toString();
+      rsvpForm.querySelector('button[type="submit"]').textContent = "Sending…";
     });
 
     const parseLocalDateTime = (iso) => {
