@@ -635,8 +635,10 @@
     }
     textarea { min-height: 90px; resize: vertical; }
     .thanks { display: none; font-style: italic; color: var(--accent); margin-top: 12px; }
+    .gift-note { display: none; font-family: "Playfair Display", serif; font-style: italic; color: var(--primary); margin-top: 12px; text-align: center; }
     .modal.is-sent form { display: none; }
     .modal.is-sent .thanks { display: block; }
+    .modal.is-sent .gift-note { display: block; }
 
     .modal {
       position: fixed; inset: 0; z-index: 80;
@@ -668,7 +670,7 @@
       font-style: italic;
       font-size: clamp(2rem, 6vw, 3.2rem);
     }
-    footer .ar { font-family: "Playfair Display", serif; font-style: italic; color: var(--accent); margin-top: 10px; }
+    footer .ar { font-family: "Playfair Display", serif; font-style: italic; color: var(--primary); margin-top: 10px; }
 
     @media (max-width: 720px) {
       .cards { grid-template-columns: 1fr; }
@@ -714,7 +716,7 @@
     <main id="invite">
       <header class="hero">
         <div class="hero-inner">
-          <span class="watermark">INVITE</span>
+          <span class="watermark">WALIMA</span>
           <p class="kicker-en">We Would Like to Cordially Invite You to</p>
           <p class="kicker-ar" data-field="occasionEn">The Walima Reception of</p>
           <h1 class="names">
@@ -764,7 +766,8 @@
           <div class="schedule">
             <h3>Event schedule</h3>
             <div class="sched-row"><span class="sched-time">5:00pm</span><span class="sched-name">Guest arrival</span></div>
-            <div class="sched-row"><span class="sched-time">5:30pm</span><span class="sched-name">Dinner</span></div>
+            <div class="sched-row"><span class="sched-time">5:30pm</span><span class="sched-name">Refreshments</span></div>
+            <div class="sched-row"><span class="sched-time">7:00pm</span><span class="sched-name">Dinner</span></div>
           </div>
         </section>
 
@@ -806,16 +809,14 @@
 
         <section class="section">
           <span class="watermark" style="font-size: clamp(3.5rem, 14vw, 8rem);">RSVP</span>
-          <p class="label">RSVP</p>
-          <p class="ar-title">Will you be there?</p>
-          <p class="muted" style="max-width: 28em; margin: 0 auto 22px;">Kindly reply so we know you will be with us.</p>
-          <button class="primary-btn" id="rsvp-open" type="button">Confirm attendance</button>
+          <p class="label" style="font-size: clamp(1.15rem, 2.8vw, 1.55rem); letter-spacing: 0.22em;">RSVP</p>
+          <button class="primary-btn" id="rsvp-open" type="button" style="margin-top: 22px;">Confirm attendance</button>
         </section>
 
         <footer>
           <span class="watermark" style="font-size: clamp(3rem, 12vw, 6rem);">THANK YOU</span>
           <p class="big">Thank You</p>
-          <p class="ar">With love, we cannot wait to celebrate with you</p>
+          <p class="ar">No boxed gifts please.</p>
         </footer>
       </div>
     </main>
@@ -840,6 +841,7 @@
         <button class="primary-btn" type="submit" style="width: 100%; justify-content: center; margin-top: 18px;">Send reply</button>
       </form>
       <p class="thanks" id="rsvp-thanks" style="text-align: center;">Thank you — we cannot wait to celebrate with you.</p>
+      <p class="gift-note">No boxed gifts please.</p>
     </div>
   </div>
 
